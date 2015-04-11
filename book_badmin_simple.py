@@ -244,9 +244,9 @@ def check_Avail(cookie, task, Date):
     return if_avail,book_data
 
 def book_badminton():
-    depart = "数学科学学院"
-    user_info = [{'userid':'13110180023','passwd':'5facechallenge','mobile':'15201926086','name':'吴泽慧'},\
-            {'userid':'13110180026','passwd':'','mobile':'13162526856','name':'张航'}]
+    depart = ""
+    user_info = [{'userid':'','passwd':','mobile':'','name':''},\
+            {'userid':'','passwd':'','mobile':'','name':''}]
     task_list = [{'weekday':'Thu','beginTime':20,"location":"bqymq"}, {'weekday':'Sun','beginTime':21,'location':'zdymq'}]
     cookie = ''
     for i,t in enumerate(task_list):

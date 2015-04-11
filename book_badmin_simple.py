@@ -245,7 +245,7 @@ def check_Avail(cookie, task, Date):
 
 def book_badminton():
     depart = ""
-    user_info = [{'userid':'','passwd':','mobile':'','name':''},\
+    user_info = [{'userid':'','passwd':'','mobile':'','name':''},\
             {'userid':'','passwd':'','mobile':'','name':''}]
     task_list = [{'weekday':'Thu','beginTime':20,"location":"bqymq"}, {'weekday':'Sun','beginTime':21,'location':'zdymq'}]
     cookie = ''
@@ -289,8 +289,8 @@ def book_badminton():
                     sleep(10)
             # send mail
             fdmail = smtplib.SMTP('mail.fudan.edu.cn')
-            my_mail_addr = '13110180023@fudan.edu.cn'
-            my_mail_passwd = '5facechallenge'
+            my_mail_addr = ''
+            my_mail_passwd = ''
             fdmail.login(my_mail_addr,my_mail_passwd)
             if has_book:
                 msg = MIMEText('badminton has booked for you.\nlocation:%s\nday:%s\nbeginTime:%s'%(location,date_str,beginTime))

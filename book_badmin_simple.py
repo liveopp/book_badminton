@@ -26,6 +26,10 @@ def split_url(url):
     return loc,pat,paras
 
 def user_login(username,passwd):
+    '''
+    Login with username and passwd
+    return cookie
+    '''
     # conn1 : "GET" uis login cookie
     uis_url = "uis2.fudan.edu.cn"
     uis_path = "/amserver/UI/Login"

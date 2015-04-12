@@ -17,7 +17,8 @@ tint_To_Str = {8:"8:00",9:"9:00",10:"10:00",11:"11:00",\
         20:"20:00",21:"21:00",22:"22:30"}
 
 def split_url(url):
-    '''split url to get location and path dir.
+    '''
+    split url to get location and path dir.
     '''
     sp = parse.urlparse(url)
     loc = sp.netloc
@@ -105,7 +106,7 @@ def get_resourcesID(cookie, contentid, Date):
     match = p.findall(html)
     return match
 
-def get_Time_Avail(cookie, contentid, Date):
+def get_time_avail(cookie, contentid, Date):
     path = "/ordinary/meta/serviceResourceAction.action"
     data_dict ={"serviceContent.id":contentid,"currentDate":Date}
     params = parse.urlencode(data_dict)
@@ -120,12 +121,12 @@ def get_Time_Avail(cookie, contentid, Date):
     conn.request("GET", path+('?%s'%params), headers = header)
     res = conn.getresponse()
     html = res.read().decode('utf8')
-    p = re.compile(r"<font>([0:9]{1,2}):00<font>")
+    p = re.compile(r"<font>([0-9]{1,2}):00<font>")
     match = p.findall(html)
     avail_t_list = [int(m) for m in match]
     return avail_t_list
 
-def check_Resourcesid(cookie, resourcesID, endTime, beginTime):
+def check_resourcesid(cookie, resourcesID, endTime, beginTime):
     path = "/ordinary/meta/serviceResourceAction!timesLimit.action"
     data = parse.urlencode({"serviceResource.id":resourcesID,"endTime":endTime,"beginTime":beginTime})
     header = {
@@ -178,29 +179,7 @@ def book(cookie, resourceID, contentid, Date, endTime, beginTime, name, mobile, 
     else:
         return False
 
-def test():
-    #user info
-    import sys
-    username = sys.argv[1]
-    passwd = sys.argv[2]
-    Date = "2015-03-22"
-    name = "吴泽慧"
-    mobile = "15201926086"
-    depart = "数学科学学院"
-    # log in to get Cookie
-    cookie = user_login(username, passwd)
-    # get Resources ID
-    IDdata_list = get_resourcesID(cookie, contentid, Date)
-    resourcesID = IDdata_list[0][0]
-    beginTime = IDdata_list[0][1]
-    endTime = IDdata_list[0][2]
-    # check availability
-    #tmp = check_available(cookie, resourcesID, endTime, beginTime)
-    # Booking Badminton playground
-    if book(cookie, resourcesID, contentid, Date, endTime, beginTime, name, mobile, depart):
-        print( '%s\n%s\n%s\n%s\n%s\n Booking is Successful'%(name,username,Date,beginTime,endTime) )
-
-def sleep_To_Day(weekday):
+def sleep_to_day(weekday):
     weekday_dict = {"Mon":0,"Tue":1,"Wed":2,"Thu":3,"Fri":4,"Sat":5,"Sun":6}
     if weekday_dict.has_key(weekday):
         curTime = datetime.datetime.now()
@@ -217,13 +196,13 @@ def sleep_To_Day(weekday):
         deltaT = nextTime - curTime
         sleep(deltaT.total_seconds())
 
-def get_Date_String(datet):
+def get_date_string(datet):
     y = datet.year
     m = datet.month
     d = datet.day
     return "%s-%s-%s"%(y,m,d)
 
-def check_Avail(cookie, task, Date):
+def check_avail(cookie, task, Date):
     p = task[0]
     t = task[1]
     contentid = str_To_ContentID[p]
@@ -259,10 +238,10 @@ def book_badminton():
         mobile = user_info[i]['mobile']
         #todo login not success
         cookie = user_login(user, password)
-        date_str = get_Date_String( datetime.date.today()+datetime.timedelta(days = 7) ) 
+        date_str = get_date_string(datetime.date.today()+datetime.timedelta(days = 7) ) 
         # check whether has available
         contentid = str_To_ContentID[location]
-        avail_t = get_Time_Avail(cookie, contentid, date_str)
+        avail_t = get_time_avail(cookie, contentid, date_str)
         beginTime = tint_To_Str[begin_t]
         if begin_t in avail_t:
             has_book = False
@@ -273,8 +252,8 @@ def book_badminton():
                     avail_dict = {}
                     for m in match:
                         avail_dict[m[1]] = m
-                    if avail_dict.has_key(beginTime):
-                        resourceid = avail_dict[beginTime][0]
+                    if avail_dict.has_key(beginTime): #TODO
+                        resourceid = avail_dict[beginTime][0] 
                         endTime = avail_dict[beginTime][2]
                         for i in range(2):
                             book_res1 = book(cookie, resourceid, contentid, date_str, endTime, beginTime, name, mobile, depart)
@@ -282,7 +261,7 @@ def book_badminton():
                                 has_book = True
                                 break
                             else:
-                                sleep(1)
+                                sleep(1) # TODO
                     else:
                         is_avail = False
                 else:
